@@ -128,21 +128,7 @@ export default function App() {
   const [activeStation, setActiveStation] = useState("Line");
   const [modalRowId, setModalRowId] = useState(null);
 
-  const [rows, setRows] = useState([
-    {
-      id: crypto.randomUUID(),
-      ingredient: "",
-      unit: "",
-      par: "",
-      current: "",
-      prep: "",
-      urgent: "",
-      buy: "",
-      prepTime: "",
-      notes: "",
-      station: "Line",
-    },
-  ]);
+  const [rows, setRows] = useState([]);
 
   const handleChange = (id, field, value) => {
     setRows((prev) =>
@@ -176,22 +162,23 @@ export default function App() {
       ? rows
       : rows.filter((r) => r.station === activeStation);
 
+  const hasAnyRows = rows.length > 0;
   const activeModalRow = rows.find((r) => r.id === modalRowId);
 
   return (
     <div className="min-h-screen bg-[#f7f6f3] p-4 text-black">
       <h1 className="text-xl font-bold mb-3">Knead-to-Prep</h1>
 
-      {/* Station Tabs */}
+      {/* Tabs */}
       <div className="flex gap-2 mb-4">
         {stations.map((station) => (
           <button
             key={station}
             onClick={() => setActiveStation(station)}
-            className={`px-3 py-1 rounded-full text-sm border ${
+            className={`px-3 py-1 rounded-full text-sm border transition ${
               activeStation === station
                 ? "bg-black text-white"
-                : "bg-white"
+                : "bg-white text-black"
             }`}
           >
             {station}
@@ -199,77 +186,94 @@ export default function App() {
         ))}
       </div>
 
-      <div className="overflow-x-auto bg-white rounded-xl shadow">
-        <table className="min-w-full border-collapse text-sm">
-          <thead className="bg-[#e6e3dc]">
-            <tr>
-              {[
-                "Ingredient",
-                "Unit",
-                "Par",
-                "Current",
-                "Prep",
-                "Urgent",
-                "Buy",
-                "Prep Time",
-                "Notes",
-              ].map((h) => (
-                <th key={h} className="border p-2 text-left whitespace-nowrap">
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-
-          <tbody>
-            {filteredRows.map((row) => (
-              <tr key={row.id} className="border-t align-top">
+      {/* ALL TAB – EMPTY STATE */}
+      {activeStation === "All" && !hasAnyRows ? (
+        <div className="bg-white rounded-xl shadow p-6 text-center text-gray-500">
+          No ingredients added yet.
+        </div>
+      ) : (
+        <div className="overflow-x-auto bg-white rounded-xl shadow">
+          <table className="min-w-full border-collapse text-sm">
+            <thead className="bg-[#e6e3dc]">
+              <tr>
                 {[
-                  "ingredient",
-                  "unit",
-                  "par",
-                  "current",
-                  "prep",
-                  "urgent",
-                  "buy",
-                  "prepTime",
-                ].map((field) => (
-                  <td key={field} className="border p-1">
-                    <input
-                      className="w-full border rounded px-2 py-1"
-                      value={row[field]}
-                      onChange={(e) =>
-                        handleChange(row.id, field, e.target.value)
-                      }
-                    />
-                  </td>
-                ))}
-
-                {/* Notes Indicator */}
-                <td className="border p-1 text-center">
-                  <button
-                    onClick={() => setModalRowId(row.id)}
-                    className="text-xl"
+                  "Ingredient",
+                  "Unit",
+                  "Par",
+                  "Current",
+                  "Prep",
+                  "Urgent",
+                  "Buy",
+                  "Prep Time",
+                  "Notes",
+                ].map((h) => (
+                  <th
+                    key={h}
+                    className="border p-2 text-left whitespace-nowrap"
                   >
-                    {row.notes ? "⚠️" : "➕"}
-                  </button>
-                </td>
+                    {h}
+                  </th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
 
-      <button
-        onClick={addRow}
-        className="mt-4 px-4 py-2 bg-[#8b2c2c] text-white rounded-lg"
-      >
-        + Add Ingredient
-      </button>
+            <tbody>
+              {filteredRows.map((row) => (
+                <tr key={row.id} className="border-t align-top">
+                  {[
+                    "ingredient",
+                    "unit",
+                    "par",
+                    "current",
+                    "prep",
+                    "urgent",
+                    "buy",
+                    "prepTime",
+                  ].map((field) => (
+                    <td key={field} className="border p-1">
+                      <input
+                        className="w-full border rounded px-2 py-1 bg-white text-black"
+                        value={row[field]}
+                        onChange={(e) =>
+                          handleChange(row.id, field, e.target.value)
+                        }
+                      />
+                    </td>
+                  ))}
 
-      {/* Notes Modal */}
+                  {/* Notes Indicator */}
+                  <td className="border p-1 text-center">
+                    <button
+                      onClick={() => setModalRowId(row.id)}
+                      className="text-xl"
+                      title={
+                        row.notes
+                          ? "Night shift left a note"
+                          : "Add night shift note"
+                      }
+                    >
+                      {row.notes ? "⚠️" : "➕"}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {activeStation !== "All" && (
+        <button
+          onClick={addRow}
+          className="mt-4 px-4 py-2 bg-[#8b2c2c] text-white rounded-lg"
+        >
+          + Add Ingredient
+        </button>
+      )}
+
+      {/* NOTES MODAL */}
       {activeModalRow && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-4 w-[90%] max-w-md">
             <h2 className="font-semibold mb-2">
               Night Shift Notes –{" "}
@@ -277,7 +281,7 @@ export default function App() {
             </h2>
 
             <textarea
-              className="w-full border rounded p-2 bg-yellow-50"
+              className="w-full border rounded p-2 bg-yellow-50 text-black"
               rows={4}
               value={activeModalRow.notes}
               onChange={(e) =>
