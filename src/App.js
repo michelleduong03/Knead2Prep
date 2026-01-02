@@ -165,9 +165,35 @@ export default function App() {
   const hasAnyRows = rows.length > 0;
   const activeModalRow = rows.find((r) => r.id === modalRowId);
 
+  const prepList = rows
+  .map((row) => {
+    const par = Number(row.par);
+    const current = Number(row.current);
+
+    let amountToPrep = 0;
+
+    if (!isNaN(par) && !isNaN(current) && current < par) {
+      amountToPrep = par - current;
+    }
+
+    if (row.prep) {
+      amountToPrep = row.prep;
+    }
+
+    if (amountToPrep > 0) {
+      return {
+        ...row,
+        amountToPrep,
+      };
+    }
+
+    return null;
+  })
+  .filter(Boolean);
+
   return (
     <div className="min-h-screen bg-[#f7f6f3] p-4 text-black">
-      <h1 className="text-xl font-bold mb-3">Knead-to-Prep</h1>
+      <h1 className="text-xl font-bold mb-3">Knead2Prep</h1>
 
       {/* Tabs */}
       <div className="flex gap-2 mb-4">
@@ -270,6 +296,54 @@ export default function App() {
           + Add Ingredient
         </button>
       )}
+
+      {/* PREP LIST */}
+      {prepList.length > 0 && (
+        <div className="mt-8 bg-white rounded-xl shadow p-4">
+          <h2 className="text-lg font-semibold mb-3">
+            Prep List for Today
+          </h2>
+
+          <table className="w-full text-sm border-collapse">
+            <thead className="bg-[#e6e3dc]">
+              <tr>
+                <th className="border p-2 text-left">Ingredient</th>
+                <th className="border p-2">Station</th>
+                <th className="border p-2">Prep Amount</th>
+                <th className="border p-2">Urgent</th>
+                <th className="border p-2">Notes</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {prepList.map((item) => (
+                <tr key={item.id} className="border-t">
+                  <td className="border p-2 font-medium">
+                    {item.ingredient || "—"}
+                  </td>
+
+                  <td className="border p-2 text-center">
+                    {item.station}
+                  </td>
+
+                  <td className="border p-2 text-center">
+                    {item.amountToPrep}
+                  </td>
+
+                  <td className="border p-2 text-center">
+                    {item.urgent ? "⚠️" : "—"}
+                  </td>
+
+                  <td className="border p-2 text-xs text-gray-600">
+                    {item.notes || "—"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
 
       {/* NOTES MODAL */}
       {activeModalRow && (
