@@ -217,194 +217,122 @@ export default function App() {
           No ingredients added yet.
         </div>
       ) : (
-        <>
-          {/* MOBILE CARDS (visible on small screens) */}
-          <div className="sm:hidden space-y-3">
-            {filteredRows.map((row) => (
-              <div key={row.id} className="bg-white rounded-lg shadow p-4">
-                <div className="flex items-start justify-between mb-3">
+        <div className="space-y-3">
+          {filteredRows.map((row) => (
+            <div key={row.id} className="bg-white rounded-lg shadow p-4">
+              <div className="flex items-start justify-between mb-3">
+                <input
+                  className="flex-1 text-lg font-semibold border-b-2 border-transparent focus:border-black outline-none bg-transparent"
+                  placeholder="Ingredient name"
+                  value={row.ingredient}
+                  onChange={(e) =>
+                    handleChange(row.id, "ingredient", e.target.value)
+                  }
+                />
+                <button
+                  onClick={() => setModalRowId(row.id)}
+                  className="text-2xl ml-2 flex-shrink-0"
+                  title={row.notes ? "Night shift left a note" : "Add note"}
+                >
+                  {row.notes ? "⚠️" : "➕"}
+                </button>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs text-gray-500 block mb-1">
+                    Unit
+                  </label>
                   <input
-                    className="flex-1 text-lg font-semibold border-b-2 border-transparent focus:border-black outline-none bg-transparent"
-                    placeholder="Ingredient name"
-                    value={row.ingredient}
+                    className="w-full border rounded px-3 py-2"
+                    value={row.unit}
                     onChange={(e) =>
-                      handleChange(row.id, "ingredient", e.target.value)
+                      handleChange(row.id, "unit", e.target.value)
                     }
                   />
-                  <button
-                    onClick={() => setModalRowId(row.id)}
-                    className="text-2xl ml-2 flex-shrink-0"
-                    title={row.notes ? "Night shift left a note" : "Add note"}
-                  >
-                    {row.notes ? "⚠️" : "➕"}
-                  </button>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-xs text-gray-500 block mb-1">
-                      Unit
-                    </label>
-                    <input
-                      className="w-full border rounded px-3 py-2"
-                      value={row.unit}
-                      onChange={(e) =>
-                        handleChange(row.id, "unit", e.target.value)
-                      }
-                    />
-                  </div>
+                <div>
+                  <label className="text-xs text-gray-500 block mb-1">
+                    Par
+                  </label>
+                  <input
+                    className="w-full border rounded px-3 py-2"
+                    value={row.par}
+                    onChange={(e) =>
+                      handleChange(row.id, "par", e.target.value)
+                    }
+                  />
+                </div>
 
-                  <div>
-                    <label className="text-xs text-gray-500 block mb-1">
-                      Par
-                    </label>
-                    <input
-                      className="w-full border rounded px-3 py-2"
-                      value={row.par}
-                      onChange={(e) =>
-                        handleChange(row.id, "par", e.target.value)
-                      }
-                    />
-                  </div>
+                <div>
+                  <label className="text-xs text-gray-500 block mb-1">
+                    Current
+                  </label>
+                  <input
+                    className="w-full border rounded px-3 py-2"
+                    value={row.current}
+                    onChange={(e) =>
+                      handleChange(row.id, "current", e.target.value)
+                    }
+                  />
+                </div>
 
-                  <div>
-                    <label className="text-xs text-gray-500 block mb-1">
-                      Current
-                    </label>
-                    <input
-                      className="w-full border rounded px-3 py-2"
-                      value={row.current}
-                      onChange={(e) =>
-                        handleChange(row.id, "current", e.target.value)
-                      }
-                    />
-                  </div>
+                <div>
+                  <label className="text-xs text-gray-500 block mb-1">
+                    Prep
+                  </label>
+                  <input
+                    className="w-full border rounded px-3 py-2"
+                    value={row.prep}
+                    onChange={(e) =>
+                      handleChange(row.id, "prep", e.target.value)
+                    }
+                  />
+                </div>
 
-                  <div>
-                    <label className="text-xs text-gray-500 block mb-1">
-                      Prep
-                    </label>
-                    <input
-                      className="w-full border rounded px-3 py-2"
-                      value={row.prep}
-                      onChange={(e) =>
-                        handleChange(row.id, "prep", e.target.value)
-                      }
-                    />
-                  </div>
+                <div>
+                  <label className="text-xs text-gray-500 block mb-1">
+                    Urgent
+                  </label>
+                  <input
+                    className="w-full border rounded px-3 py-2"
+                    value={row.urgent}
+                    onChange={(e) =>
+                      handleChange(row.id, "urgent", e.target.value)
+                    }
+                  />
+                </div>
 
-                  <div>
-                    <label className="text-xs text-gray-500 block mb-1">
-                      Urgent
-                    </label>
-                    <input
-                      className="w-full border rounded px-3 py-2"
-                      value={row.urgent}
-                      onChange={(e) =>
-                        handleChange(row.id, "urgent", e.target.value)
-                      }
-                    />
-                  </div>
+                <div>
+                  <label className="text-xs text-gray-500 block mb-1">
+                    Buy
+                  </label>
+                  <input
+                    className="w-full border rounded px-3 py-2"
+                    value={row.buy}
+                    onChange={(e) =>
+                      handleChange(row.id, "buy", e.target.value)
+                    }
+                  />
+                </div>
 
-                  <div>
-                    <label className="text-xs text-gray-500 block mb-1">
-                      Buy
-                    </label>
-                    <input
-                      className="w-full border rounded px-3 py-2"
-                      value={row.buy}
-                      onChange={(e) =>
-                        handleChange(row.id, "buy", e.target.value)
-                      }
-                    />
-                  </div>
-
-                  <div className="col-span-2">
-                    <label className="text-xs text-gray-500 block mb-1">
-                      Prep Time
-                    </label>
-                    <input
-                      className="w-full border rounded px-3 py-2"
-                      value={row.prepTime}
-                      onChange={(e) =>
-                        handleChange(row.id, "prepTime", e.target.value)
-                      }
-                    />
-                  </div>
+                <div className="col-span-2">
+                  <label className="text-xs text-gray-500 block mb-1">
+                    Prep Time
+                  </label>
+                  <input
+                    className="w-full border rounded px-3 py-2"
+                    value={row.prepTime}
+                    onChange={(e) =>
+                      handleChange(row.id, "prepTime", e.target.value)
+                    }
+                  />
                 </div>
               </div>
-            ))}
-          </div>
-
-          {/* DESKTOP TABLE (hidden on small screens) */}
-          <div className="hidden sm:block overflow-x-auto bg-white rounded-xl shadow">
-            <table className="min-w-full border-collapse text-sm">
-              <thead className="bg-[#e6e3dc]">
-                <tr>
-                  {[
-                    "Ingredient",
-                    "Unit",
-                    "Par",
-                    "Current",
-                    "Prep",
-                    "Urgent",
-                    "Buy",
-                    "Prep Time",
-                    "Notes",
-                  ].map((h) => (
-                    <th
-                      key={h}
-                      className="border p-2 text-left whitespace-nowrap"
-                    >
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-
-              <tbody>
-                {filteredRows.map((row) => (
-                  <tr key={row.id} className="border-t align-top">
-                    {[
-                      "ingredient",
-                      "unit",
-                      "par",
-                      "current",
-                      "prep",
-                      "urgent",
-                      "buy",
-                      "prepTime",
-                    ].map((field) => (
-                      <td key={field} className="border p-1">
-                        <input
-                          className="w-full border rounded px-2 py-1 bg-white text-black"
-                          value={row[field]}
-                          onChange={(e) =>
-                            handleChange(row.id, field, e.target.value)
-                          }
-                        />
-                      </td>
-                    ))}
-
-                    <td className="border p-1 text-center">
-                      <button
-                        onClick={() => setModalRowId(row.id)}
-                        className="text-xl"
-                        title={
-                          row.notes
-                            ? "Night shift left a note"
-                            : "Add night shift note"
-                        }
-                      >
-                        {row.notes ? "⚠️" : "➕"}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </>
+            </div>
+          ))}
+        </div>
       )}
 
       {activeStation !== "All" && (
@@ -421,8 +349,7 @@ export default function App() {
         <div className="mt-8 bg-white rounded-xl shadow p-4">
           <h2 className="text-lg font-semibold mb-3">Prep List for Today</h2>
 
-          {/* Mobile prep list */}
-          <div className="sm:hidden space-y-3">
+          <div className="space-y-3">
             {prepList.map((item) => (
               <div key={item.id} className="border rounded-lg p-3">
                 <div className="font-semibold text-base mb-2">
@@ -450,43 +377,6 @@ export default function App() {
               </div>
             ))}
           </div>
-
-          {/* Desktop prep list */}
-          <table className="hidden sm:table w-full text-sm border-collapse">
-            <thead className="bg-[#e6e3dc]">
-              <tr>
-                <th className="border p-2 text-left">Ingredient</th>
-                <th className="border p-2">Station</th>
-                <th className="border p-2">Prep Amount</th>
-                <th className="border p-2">Urgent</th>
-                <th className="border p-2">Notes</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {prepList.map((item) => (
-                <tr key={item.id} className="border-t">
-                  <td className="border p-2 font-medium">
-                    {item.ingredient || "—"}
-                  </td>
-
-                  <td className="border p-2 text-center">{item.station}</td>
-
-                  <td className="border p-2 text-center">
-                    {item.amountToPrep}
-                  </td>
-
-                  <td className="border p-2 text-center">
-                    {item.urgent || "—"}
-                  </td>
-
-                  <td className="border p-2 text-xs text-gray-600">
-                    {item.notes || "—"}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
         </div>
       )}
 
