@@ -119,7 +119,6 @@
 //     </div>
 //   );
 // }
-
 import { useState } from "react";
 
 const stations = ["All", "Line", "BOH", "Expo"];
@@ -208,7 +207,17 @@ export default function App() {
 
       return null;
     })
-    .filter(Boolean);
+    .filter(Boolean)
+    .sort((a, b) => {
+      // Sort by urgent field - items with urgent values come first
+      const aUrgent = a.urgent?.trim() || "";
+      const bUrgent = b.urgent?.trim() || "";
+      
+      if (aUrgent && !bUrgent) return -1;
+      if (!aUrgent && bUrgent) return 1;
+      
+      return 0;
+    });
 
   return (
     <div className="min-h-screen bg-[#f7f6f3] p-3 sm:p-4 text-black pb-20">
