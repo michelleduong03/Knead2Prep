@@ -137,6 +137,26 @@ export default function App() {
     );
   };
 
+  const markAsCompleted = (id) => {
+    setRows((prev) =>
+      prev.map((row) => {
+        if (row.id === id) {
+          const current = Number(row.current) || 0;
+          const amountPrepped = Number(row.prep) || (Number(row.par) - current);
+          const newCurrent = current + amountPrepped;
+          
+          return {
+            ...row,
+            current: String(newCurrent),
+            notes: "",
+            prep: "",
+          };
+        }
+        return row;
+      })
+    );
+  };
+
   const addRow = () => {
     setRows((prev) => [
       ...prev,
@@ -352,8 +372,16 @@ export default function App() {
           <div className="space-y-3">
             {prepList.map((item) => (
               <div key={item.id} className="border rounded-lg p-3">
-                <div className="font-semibold text-base mb-2">
-                  {item.ingredient || "—"}
+                <div className="flex items-start justify-between mb-2">
+                  <div className="font-semibold text-base">
+                    {item.ingredient || "—"}
+                  </div>
+                  <button
+                    onClick={() => markAsCompleted(item.id)}
+                    className="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition flex-shrink-0 ml-2"
+                  >
+                    ✓ Done
+                  </button>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div>
